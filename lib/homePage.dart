@@ -10,65 +10,90 @@ class HomePage extends StatefulWidget{
 
 }
 // Widget state
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
   ColorGenerator colorRandomiser = new ColorGenerator();
   Color color = new Color.fromARGB(255, 1, 255, 1);
   double positionBottom = 0;
   double positionRight = 0;
-  String res="Lest play some game. You just need to press button. \r\n Rule is simple: you miss - you lose";
+  double positionTop = 100;
+  String res = "Lest play some game. You just need to press button. \r\n Rule is simple: you miss - you lose";
+
   // Changing state according to the background color
-  void _changeColor(){
-    setState((){
+  void _changeColor() {
+    setState(() {
       color = colorRandomiser.generateColor();
-      res="missed (^_^) ";
-        });
+      res = "missed (^_^) ";
+    });
   }
 
   // This game was made for you. Have fun.
   Random random = new Random();
-  void _game(){
+
+  void _game() {
     setState(() {
       res = "Ok. You`re accurate buddy, but you won't win next time!!!";
       positionBottom = random.nextInt(400).toDouble();
       positionRight = random.nextInt(300).toDouble();
+      positionTop = random.nextInt(300).toDouble();
     });
   }
 
+  final GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    // GestureDetector is needed to handle taps
-    Widget home = new GestureDetector(
-      onTap: _changeColor,
-      child:Scaffold(
-        backgroundColor: color,
-        body: Container(
-          // We use Row and Column here to place text in center of the screen: row for vertically, then column for horizontally
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Hey there"),
-                  Text(res),
-                ],
-              )
-            ],
+    return Scaffold(
+      key: _key,
+      body: GestureDetector(
+        onTap: _changeColor,
+        child: Container(
+          color: color,
+          child: Center(
+            child: Text(
+              "Hey there ",
+              style: TextStyle
+                (
+                  decoration: TextDecoration.none
+              ),
+            ),
           ),
         ),
-
-        // "Buttons are not for games", they sayin'.
-        // "Try this" - we answer.
-        floatingActionButton: Padding(
-          padding: EdgeInsets.only(bottom: positionBottom, right: positionRight),
-          child :FloatingActionButton(
+      ),
+      appBar: AppBar(
+        title:
+        FittedBox(
+          fit: BoxFit.contain,
+          child: Text(res),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.apps),
+          onPressed: () => _key.currentState.openDrawer(),
+        ),
+      ),
+      floatingActionButton: Padding(
+          padding: EdgeInsets.only(
+              bottom: positionBottom, right: positionRight),
+          child: FloatingActionButton(
             onPressed: _game,
             child: Icon(Icons.gamepad),
             mini: true,
           )
+      ),
+      drawer: new Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: positionTop, right: positionRight),
+              child: FloatingActionButton(
+                child: Icon(Icons.toys),
+                backgroundColor: color,
+                onPressed: _game,
+              ),
+            ),
+          ],
         ),
       ),
     );
-    return home;
   }
 }

@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
  */
 class ColorGenerator{
   Random random = new Random();
-
   // Generating new Color.
   // We call Random only one time bcs it's cheaper than calling it 3 times ($_^)
   Color generateColor(){
