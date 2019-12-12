@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'colorRandomiser.dart';
+import 'color_randomiser.dart';
 import 'dart:math';
 // Creating new widget
 class HomePage extends StatefulWidget{
   HomePage({Key key}) : super (key:key);
   @override
   _HomePageState createState() => new _HomePageState();
-
 }
 // Widget state
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
   ColorGenerator colorRandomiser = new ColorGenerator();
   Color color = new Color.fromARGB(255, 1, 255, 1);
   double positionBottom = 0;
@@ -25,10 +25,8 @@ class _HomePageState extends State<HomePage> {
       res = "missed (^_^) ";
     });
   }
-
   // This game was made for you. Have fun.
   Random random = new Random();
-
   void _game() {
     setState(() {
       res = "Ok. You`re accurate buddy, but you won't win next time!!!";
@@ -37,9 +35,6 @@ class _HomePageState extends State<HomePage> {
       positionTop = random.nextInt(300).toDouble();
     });
   }
-
-  final GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,8 +46,7 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Text(
               "Hey there ",
-              style: TextStyle
-                (
+              style: TextStyle(
                   decoration: TextDecoration.none
               ),
             ),
@@ -60,15 +54,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        title:
-        FittedBox(
+        title: FittedBox(
           fit: BoxFit.contain,
           child: Text(res),
-        ),
+          ),
         leading: IconButton(
           icon: Icon(Icons.apps),
           onPressed: () => _key.currentState.openDrawer(),
-        ),
+          ),
       ),
       floatingActionButton: Padding(
           padding: EdgeInsets.only(
